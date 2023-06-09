@@ -62,6 +62,11 @@ docker run -it --rm --link my-container mariadb:latest mysql -hmy-container -uro
 
 ```
 
+```
+# удаление образа
+docker rmi my-new-build
+```
+
 ```php
 <?php
 
