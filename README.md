@@ -2,16 +2,21 @@
 ================================
 
 ```bash
-# собираем контенер
-docker build --tag my-new-container .
+# Клонируем репазиторий
+git clone https://github.com/webnitros/docker-mariadb.git
+
+# Создаем образ и импортируем в него setup.sql, имя базы данных mydatabase, имя образа my-new-container
+sh docker_build.sh setup.sql mydatabase my-new-build
+
+# запускаем контенер my-container на порту 13308 из образа my-new-build
+sh docker_run.sh my-container 13308 my-new-build
+
 ```
 
 ```bash
-# запускаем контенер
-docker run -d --rm --name my-container -p 3307:3306 my-new-container
-```
-
-```bash
+# Вход в контенер
+docker exec -it my-container /bin/bash
+# Логи
 docker logs my-container
 ```
 
@@ -47,7 +52,7 @@ Version: '10.3.7-MariaDB-1:10.3.7+maria~jessie' socket: '/var/run/mysqld/mysqld.
 
 ```
 
-docker run -it --rm --link my-container mariadb:latest mysql -hmy-container -uroot -proot fandeco -e "select * from phinxlog;"
+docker run -it --rm --link my-container mariadb:latest mysql -hmy-container -uroot -proot mydatabase -e "select * from phinxlog;"
 +---------+
 | myfield |
 +---------+
@@ -60,10 +65,10 @@ docker run -it --rm --link my-container mariadb:latest mysql -hmy-container -uro
 ```php
 <?php
 
-$dbhost = '144.76.173.62';
+$dbhost = '127.0.0.1:13308';
 $dbuser = 'root';
 $dbpass = 'root';
-$dbname = 'fandeco'; // Замените на имя вашей базы данных
+$dbname = 'mydatabase'; // Замените на имя вашей базы данных
 
 $conn = new mysqli($dbhost, $dbuser, $dbpass, $dbname, 3307);
 
@@ -79,13 +84,12 @@ $result = $conn->query($query);
 
 // Проверка результата запроса и вывод списка таблиц
 if ($result) {
-while ($row = $result->fetch_row()) {
-echo $row[0] . "<br>";
+    while ($row = $result->fetch_row()) {
+    echo $row[0] . "<br>";
 }
 } else {
-echo 'Error: ' . $conn->error;
+    echo 'Error: ' . $conn->error;
 }
 
 $conn->close();
-
 ```

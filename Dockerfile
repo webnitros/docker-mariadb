@@ -8,7 +8,7 @@ ENV MYSQL_ROOT_PASSWORD=root
 
 COPY my.cnf /etc/mysql/conf.d/my.cnf
 
-COPY setup.sql /docker-entrypoint-initdb.d/
+COPY database.sql /docker-entrypoint-initdb.d/
 
 # Need to change the datadir to something else that /var/lib/mysql because the parent docker file defines it as a volume.
 # https://docs.docker.com/engine/reference/builder/#volume :
