@@ -2,10 +2,12 @@
 ================================
 
 ```bash
+# собираем контенер
 docker build --tag my-new-container .
 ```
 
 ```bash
+# запускаем контенер
 docker run -d --rm --name my-container -p 3307:3306 my-new-container
 ```
 
@@ -13,6 +15,7 @@ docker run -d --rm --name my-container -p 3307:3306 my-new-container
 docker logs my-container
 ```
 
+```
 (there was is initialization here, therefore we win)
 
 2018-06-08 21:15:55 0 [Note] mysqld (mysqld 10.3.7-MariaDB-1:10.3.7+maria~jessie) starting as process 1 ...
