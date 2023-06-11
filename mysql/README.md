@@ -6,7 +6,7 @@
 git clone https://github.com/webnitros/docker-mariadb.git
 
 # Создаем образ и импортируем в него setup.sql, имя базы данных mydatabase, имя образа my-new-container
-sh docker_build.sh setup.sql mydatabase my-new-build
+sh docker_build.sh fandeco.sql mydatabase my-new-build
 
 # запускаем контенер my-container на порту 13308 из образа my-new-build
 sh docker_run.sh my-container 13308 my-new-build
