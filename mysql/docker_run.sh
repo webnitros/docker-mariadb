@@ -25,3 +25,4 @@ echo "Build: $c_build"
 docker run -d --rm --name "$c_name" -p "$c_port":3306 "$c_build"
 
 #docker run -d --rm --name my-container-1 -p 13308:3306 my-new-container2
+#docker run -d --rm --name my-container-1 -p 13308:3306 my-new-container2

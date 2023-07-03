@@ -1,0 +1,32 @@
+#!/bin/bash
+
+# sh push dumps/divinare_kz-unpublished.sql
+# sh push dumps/divinare_kz-publiched.sql
+
+# dumpDB
+setup_file="$1"
+
+database_file="database.sql"
+if [ -z "$setup_file" ] || [ ! -f "$setup_file" ]; then
+  echo "Error: Sql file not provided or does not exist."
+  exit 1
+fi
+
+rm -f "$database_file"
+echo "CREATE DATABASE mydatabase; USE mydatabase;" >"$database_file"
+cat "$setup_file" >>"$database_file"
+
+
+# создаем образ базой данных внутри
+docker build --tag divinare-mysql10 .
+docker rm my_container_mysql -f
+docker run -d --rm --name my_container_mysql -p 33022:3306 divinare-mysql10
+
+# commit нужен чтобы выполнить фиксацию
+docker commit my_container_mysql divinare-kz-mysql10
+# тег чтобы определить тег для внешнего образа
+docker tag divinare-kz-mysql10 cr.selcloud.ru/divinare-kz/mysql10:latest
+# финальный шаг загрузка образ
+echo "---PUSH"
+docker push cr.selcloud.ru/divinare-kz/mysql10:latest
+echo "---FINISH"

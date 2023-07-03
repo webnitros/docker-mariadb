@@ -12,7 +12,7 @@ sh import-data.sh
 ```bash
 docker build -t my-elasticsearch:7.9.2 .
 docker run -d -p 19000:9200 --name myelastic my-elasticsearch:7.9.2
-docker exec -it myelastic /bin/bash
+docker exec -it fandeco-demo20-elastic /bin/bash
 ```
 
 
@@ -84,8 +84,40 @@ curl -X GET "http://localhost:19001/products_dev16/_count"
 
 docker rm myelastic -f && docker build -t my-elasticsearch:7.9.2 . && docker run -d -p 19000:9200 --name myelastic my-elasticsearch:7.9.2 && docker exec -it myelastic /bin/bash -c "/usr/share/elasticsearch/import-data.sh"
 
-
+docker exec -it myelastic /bin/bash
 
 docker run -d -p 19001:9200 --name myelastic2 my-elasticsearch:7.9.2 && docker exec -it myelastic2 /bin/bash -c "/usr/share/elasticsearch/import-data.sh"
+
+
+
+docker commit myelastic myelastic-build
+
+
+docker run -d -p 19200:9200 --name myelastic-searh myelastic-build && docker exec -it myelastic-searh /bin/bash
+
+
+docker exec -it fandeco-master-elastic /bin/bash 
+docker exec -it fandeco-master-elastic /bin/bash 
+
+
+
+```
+
+
+```bash
+docker login cr.selcloud.ru
+token
+CRgAAAAABtIpQC1Q7xftdYOx7ihg0F9ymiTiE0F8
+
+docker tag myelastic-build cr.selcloud.ru/fandeco-elastic/myelastic:first
+docker push cr.selcloud.ru/fandeco-elastic/myelastic:first
+
+docker pull cr.selcloud.ru/fandeco-elastic/myelastic:first
+
+
+
+
+
+docker run -d -p 19201:9200 --name selectel-docker cr.selcloud.ru/fandeco-elastic/myelastic:first && docker exec -it selectel-docker /bin/bash
 
 ```
